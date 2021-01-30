@@ -50,7 +50,16 @@ def prep_old_data(read_data_df, value_start_index=(3, 2)):
         pd.DataFrame({"dates": dates, "categories": cats})
     )
     rv = pd.DataFrame(totals, columns=multi_cols, index=county_names)
+    rv = rv.mask(v <= 1, lambda v: v *  df.iloc[df[v].index, 13] #I feel like this doesn't work, but I'm curious if other people know of a better way to do this
     return rv
+    
+"""def convert_decimals (df):
+    #takes prepped dataframe
+    #splits into two dataframes, one with decimal values and one without
+    #converts decimal values into case totals
+    #merges the two dataframes
+    no_decimal_df = ~df.query('asian' <= 1)
+    decimal_df = df.query('asian' <= 1)"""
 
 
 def clean_old_data(df):
@@ -69,7 +78,7 @@ def clean_old_data(df):
     else:
         return stacked_df
 
-
+    
 def merge_duplicates(df, na_values=("0", "-")):
     # takes stacked_df, finds duplicated indices
     # checks if matching indices have same values, keeps one if true
